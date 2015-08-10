@@ -23,6 +23,10 @@ var isRunning = false;
 var canvas = document.getElementById("canvas");
 var context = canvas.getContext("2d");
 
+var mouseIsDown = false
+
+var lastMoveX = -1;
+var lastMoveY = -1
 
 window.onload = function(){
     bw = window.innerWidth;
@@ -31,23 +35,14 @@ window.onload = function(){
     ch = bh - bh%sSize - (sSize - 1);
     cw = bw - bw%sSize - (sSize - 1);
 
-    canvas.addEventListener('click', canvasClick, false);
+    canvas.addEventListener('mousedown', mDown, false);
+    canvas.addEventListener('mouseup', function(){mouseIsDown = false}, false);
+    canvas.addEventListener('mousemove', mMove, false);
 
-    drawBoard();
-
-    var x = cw/sSize;
-    var y = ch/sSize;
-
-    for(var i = 0; i < x; i++){
-        gridCells[i] = [];
-
-        for(var j = 0; j < y; j++){
-            gridCells[i][j] = new Cell(i*sSize, j*sSize, false);
-        }
-    }
+    initBoard();
 }
 
-function drawBoard(){
+function initBoard(){
 
     canvas.width = cw;
     canvas.height = ch;
@@ -65,6 +60,17 @@ function drawBoard(){
 
     context.strokeStyle = "black";
     context.stroke();
+
+    var x = cw/sSize;
+    var y = ch/sSize;
+
+    for(var i = 0; i < x; i++){
+        gridCells[i] = [];
+
+        for(var j = 0; j < y; j++){
+            gridCells[i][j] = new Cell(i*sSize, j*sSize, false);
+        }
+    }
 }
 
 
@@ -74,25 +80,57 @@ window.addEventListener("keydown", function(event) {
   if(event.keyCode == 13 && !isRunning){
 
 
-    canvas.removeEventListener('click', canvasClick, false);
+    canvas.removeEventListener('mousedown', mDown, false);
 
     isRunning = true;
     loop();
   } 
-  else{
-    canvas.addEventListener('click', canvasClick, false);
+  else if(event.keyCode == 13 && isRunning){
+    canvas.addEventListener('mousedown', mDown, false);
     isRunning = false;
+  }
+  else if(event.keyCode == 82 && !isRunning){
+    initBoard();
   }
 });
 
 
-function canvasClick(loc){
+function mDown(loc){
     var x = loc.pageX - border;
     var y = loc.pageY - border;
 
     x = x - x % sSize;
     y = y - y % sSize;
 
+    lastMoveY = y;
+    lastMoveX = x;
+
+    mouseIsDown = true;
+
+    if(!gridCells[x/sSize][y/sSize].isAlive)
+        gridCells[x/sSize][y/sSize].alive();
+
+    else
+      gridCells[x/sSize][y/sSize].dead();
+  
+}
+
+function mMove(loc){
+
+    if(!mouseIsDown)
+        return
+
+    var x = loc.pageX - border;
+    var y = loc.pageY - border;
+
+    x = x - x % sSize;
+    y = y - y % sSize;
+
+    if(lastMoveX == x && lastMoveY == y)
+        return;
+
+    lastMoveX = x;
+    lastMoveY = y;
 
     if(!gridCells[x/sSize][y/sSize].isAlive)
         gridCells[x/sSize][y/sSize].alive();
