@@ -1,14 +1,20 @@
 
 var animate = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || function(callback) { window.setTimeout(callback, 1000/60) };
+var lastTime = 0;
 
 var loop = function(){
 
-	if(isRunning){
+	var time = new Date().getTime();
+
+	if(isRunning && time > lastTime + 100){
 
 		render();
+		lastTime = new Date().getTime();
 		animate(loop);
 	}
-}
+	else if(isRunning)
+		animate(loop);
+}	
 
 
 //serious shit happens here
@@ -16,12 +22,12 @@ function render(){
 
 	var oldGrid = [];
 
-	for(var p = 0; p < gridCells.length; p++){
-		oldGrid[p] = gridCells[p].slice();
+	for(var x = 0; x < gridCells.length; x++){
+		oldGrid[x] = [];
+		for(var y = 0; y < gridCells[x].length; y++){
+			oldGrid[x][y] = gridCells[x][y].isAlive;
+		}
 	}
-
-	console.log(oldGrid[0][0]);
-	console.log(gridCells[0][0]);
 
 	//Scan the grid 
 	for(var x = 0; x < gridCells.length; x++){
@@ -33,7 +39,7 @@ function render(){
 				for(var j = y-1; j <= y+1; j++){
 
 					if(i >= 0 && j >= 0 && i < gridCells.length && j < gridCells[x].length && (i != x || j!=y))
-						if(oldGrid[i][j].isAlive)
+						if(oldGrid[i][j])
 							nbAlive++;
 				}
 			}
@@ -49,8 +55,5 @@ function render(){
 
 		}
 	}
-
-	console.log(oldGrid[0][0]);
-	console.log(gridCells[0][0]);
 }
 
