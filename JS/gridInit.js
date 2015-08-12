@@ -7,7 +7,7 @@ var cw
 var ch
 
 var sSize = 20; //Square size
-var border = 8; //border of page
+var border = 0; //border of page
 
 
 
@@ -32,8 +32,10 @@ window.onload = function(){
     bw = window.innerWidth;
     bh = window.innerHeight;
 
-    ch = bh - bh%sSize - (sSize - 1);
-    cw = bw - bw%sSize - (sSize - 1);
+    console.log(canvas.width);
+
+    ch = bh - bh%sSize +1;
+    cw = bw - bw%sSize +1;
 
     canvas.addEventListener('mousedown', mDown, false);
     canvas.addEventListener('mouseup', function(){mouseIsDown = false}, false);
@@ -46,6 +48,8 @@ function initBoard(){
 
     canvas.width = cw;
     canvas.height = ch;
+
+    console.log(canvas.width); 
 
     for (var x = 0; x <= cw; x += sSize) {
         context.moveTo(0.5 + x, 0);
@@ -74,26 +78,52 @@ function initBoard(){
 }
 
 
-//Start simulation
+//keyboard input
 
 window.addEventListener("keydown", function(event) {
-  if(event.keyCode == 13 && !isRunning){
+  if(event.keyCode == 32 && !isRunning){
 
 
     canvas.removeEventListener('mousedown', mDown, false);
+    document.getElementById('launch').innerHTML = "Stop simulation"
+    document.getElementById('reset').disabled = true;
 
     isRunning = true;
     loop();
   } 
-  else if(event.keyCode == 13 && isRunning){
+  else if(event.keyCode == 32 && isRunning){
     canvas.addEventListener('mousedown', mDown, false);
     isRunning = false;
+    document.getElementById('launch').innerHTML = "Launch simulation"
+    document.getElementById('reset').disabled = false;
   }
   else if(event.keyCode == 82 && !isRunning){
     initBoard();
   }
 });
 
+//start/stop simulation button
+
+document.getElementById("launch").addEventListener('click', function(){
+    if(!isRunning){
+        canvas.removeEventListener('mousedown', mDown, false);
+        isRunning = true;
+
+        document.getElementById('launch').innerHTML = "Stop simulation"
+        document.getElementById('reset').disabled = true;
+
+        loop();
+    }
+    else{
+        canvas.addEventListener('mousedown', mDown, false);
+        isRunning = false;
+
+        document.getElementById('launch').innerHTML = "Launch simulation"
+        document.getElementById('reset').disabled = false;
+    }
+}, false);
+
+document.getElementById('reset').addEventListener('click', initBoard, false);
 
 function mDown(loc){
     var x = loc.pageX - border;

@@ -1,0 +1,62 @@
+
+body {
+	overflow:hidden;
+}
+
+hr {
+	width:100%;
+	height:0;
+	border-bottom: dotted 1px #333;
+}
+
+/*#canvas {
+	position:absolute;
+	top:0;
+	left:0;
+	width:100%;
+	height:100%;
+}*/
+
+#panel {
+	width:400px;
+	height:100%;
+	position:absolute;
+	top:0;
+	right:0;
+	
+	background-color: #fff;
+	
+	transition:0.3s;
+	-webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+#panel.closed{
+	right:-400px;
+}
+
+#panel .content {
+	margin-left:20px;
+	margin-right:20px;
+}
+
+#panel .tool {
+	width:30px;
+	min-height: 50px;
+	position:absolute;
+	top:0;
+	left:-30px;
+	background-color:#fff;
+	text-align:center;
+	
+	font-size:18px;
+	border-bottom-left-radius:10px;
+}
+
+#panel .tool a {
+	text-decoration:none;
+}

@@ -3,17 +3,61 @@
 	<head>
 		<meta charset="utf-8">
 		<title>Conway's game of life</title>
-		<style type="text/css" src = "CSS/style.css"></style>
+		
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
+		<link rel="stylesheet" href="CSS/style.css"/>
 	</head>
 
 	<body>
 		<div id="content">
 			<canvas id = "canvas">Update your browser</canvas>
+			
 		</div>
-
+		
+		<!--------------------
+			Parameters Panel
+		--------------------- -->
+		
+		<div id="panel">
+			<div class="tool">
+				<a href="#" class="cross" onclick="tooglePanel(); return false;"><i class="glyphicon glyphicon-remove"></i></a>
+				<a href="#" class="cross" onclick="tooglePanel(); return false;"><i class="glyphicon glyphicon-chevron-left"></i></a>
+			</div>
+			<div class="content">
+				<h2>Parameters</h2>
+				<hr/>
+				<section id="group-1">
+					<button type="button" id="launch">Launch simulation</button><p>(or press spacebar)</p>
+					<br/>
+					<button type="button" id="reset">Reset</button><p>(or press 'R')</p>
+				</section>
+				<hr/>
+				<section id="group-2">
+					<p>Lorem ipsum ...</p>
+				</section>
+			</div>
+		</div>
+		
+		
 		<script type="text/javascript" src="JS/animate.js"></script>
 		<script type="text/javascript" src="JS/cells.js"></script>
 		<script type="text/javascript" src="JS/gridInit.js"></script>
+		<script>
+			// Ouvre ou cache le panel
+			function tooglePanel()
+			{
+				var panel = document.getElementById('panel');
+				
+				console.log(panel.className);
+				console.log(panel.className.search( /(?:^|\s)closed(?!\S)/ ));
+				if(panel.className.search( /(?:^|\s)closed(?!\S)/ ) >= 0 ){
+					panel.className = panel.className.replace( /(?:^|\s)closed(?!\S)/ , '' )
+				} else {
+					panel.className += ' closed';
+				}
+			}
+			
+		</script>
 	</body>
 
 </html>
